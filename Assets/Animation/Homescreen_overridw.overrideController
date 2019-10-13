@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Homescreen_overridw
+  m_Controller: {fileID: 9100000, guid: a2b2a42e18b45da49822d342a8a6e3dc, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 165b2bfaf72c0fa4eb3083a4ed8792af, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 165b2bfaf72c0fa4eb3083a4ed8792af, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 57c2c2ee57d72b94982e31285dea5f9b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 57c2c2ee57d72b94982e31285dea5f9b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6cc5fb3eb9108f74ab51aa0fdd5f86ff, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6cc5fb3eb9108f74ab51aa0fdd5f86ff, type: 2}
