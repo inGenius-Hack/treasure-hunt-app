@@ -8,14 +8,14 @@ public class PlayerData
 {
     [Header("PlayerDetails")]
     public int level;
-    public string teamName;
-    public string password;
+   // public string teamName;
+   // public string password;
 
     public PlayerData(UI_System player)
     {
         level = player.level;
-        teamName = player.teamName;
-        password = player.password;
+     //   teamName = player.teamName;
+     //   password = player.password;
     }
 
 }

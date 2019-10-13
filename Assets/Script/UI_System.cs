@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DanielLochner.Assets.SimpleScrollSnap;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,15 +13,18 @@ namespace Ingenius.UI
 
         #region Variables
         [Header("Player Data")]
-        public int level;
+        public int level = 1;
         public string teamName;
         public string password;
+        public GameObject tf_overlay;
 
         [Header("Main Properties")]
         public UI_Screen m_StartScreen;
+        public SimpleScrollSnap simpleScrollSnap;
 
         [Header("System Events")]
         public UnityEvent onSwitchedScreen = new UnityEvent();
+        public UnityEvent refresh = new UnityEvent();
 
         [Header("Fader Properties")]
         public Image m_Fader;
@@ -45,6 +49,11 @@ namespace Ingenius.UI
         #region Main Methods
         void Start()
         {
+          //  ResetPlayer();
+            Debug.Log("ui");
+            LoadPlayer();
+            refresh.Invoke();
+            simpleScrollSnap = GetComponentInChildren<SimpleScrollSnap>();
             Screen.fullScreen = false;
             screens = GetComponentsInChildren<UI_Screen>(true);
             if (m_StartScreen)
@@ -67,7 +76,7 @@ namespace Ingenius.UI
 
                 if (CurrentScreen == screens[1])
                 {
-                #if UNITY_ANDROID
+#if UNITY_ANDROID
                     Debug.Log("Nope");
                     AndroidJavaObject activity =
                        new AndroidJavaClass("com.unity3d.player.UnityPlayer")
@@ -90,9 +99,6 @@ namespace Ingenius.UI
             }
         }
         #endregion
-
-
-
 
 
 
@@ -139,6 +145,7 @@ namespace Ingenius.UI
                 m_Fader.CrossFadeAlpha(1f, m_FadeOutDuration, false);
             }
         }
+
         public void LoadScene(int sceneIndex)
         {
             StartCoroutine(WaitToLoadScene(sceneIndex));
@@ -150,16 +157,83 @@ namespace Ingenius.UI
         }
         public void LoadPlayer()
         {
-            PlayerData data=SaveSytem.LoadPlayer();
+            PlayerData data = SaveSytem.LoadPlayer();
             level = data.level;
-            teamName = data.teamName;
-            password = data.password;
+            //  teamName = data.teamName;
+            //  password = data.password;
         }
         public void SavePlayer()
         {
             SaveSytem.SavePlayer(this);
         }
+        public void ResetPlayer()
+        {
+            level = 1;
+            SavePlayer();
+        }
+        public int getSelectedLevel()
+        {
+            return simpleScrollSnap.CurrentPanel;
+        }
+        public int getCurrentlevel()
+        {
+            PlayerData data = SaveSytem.LoadPlayer();
+            return data.level;
+        }
+        public void ValidateAnswer(GameObject img_lock)
+        {
+
+            bool Answer = true;
+            //TODO 
+            Debug.Log(getSelectedLevel());
+            if (getSelectedLevel() == level)
+            {
+                if (Answer)
+                {
+                    level += 1;
+                    SavePlayer();
+                    img_lock.SetActive(false);
+                }
+                else
+                {
+                    img_lock.SetActive(true);
+                }
+            }
+            else
+            {
+                if (getSelectedLevel() < level)
+                {
+                    //Loads Question
+                }
+            }
+        }
+        public void play()
+        {
+            int index = getSelectedLevel();
+            if (index+1 <= level)
+            {
+
+                SwitchScreens(screens[5] as UI_Screen);
+            }
+
+        }
+        public void DiplayAnswerOverlay()
+        {
+            tf_overlay.SetActive(true);
+        }
+
+        public void Logout()
+        {
+            level = 1;
+            SavePlayer();
+            SwitchScreens(screens[0] as UI_Screen);
+            refresh.Invoke();
+            simpleScrollSnap.GoToPanel(0);
+
+        }
+
         #endregion
     }
-
 }
+
+    

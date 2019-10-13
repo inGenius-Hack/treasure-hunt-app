@@ -64,9 +64,11 @@
   <ItemGroup>
     <Compile Include="Assets\Script\click.cs" />
     <Compile Include="Assets\Script\ContentScrollSnapHorizontal.cs" />
+    <Compile Include="Assets\Script\Dynamicscroll.cs" />
     <Compile Include="Assets\Script\getPannel.cs" />
     <Compile Include="Assets\Script\PlayerData.cs" />
     <Compile Include="Assets\Script\SaveSytem.cs" />
+    <Compile Include="Assets\Script\SetLvlState.cs" />
     <Compile Include="Assets\Script\UI_Screen.cs" />
     <Compile Include="Assets\Script\UI_System.cs" />
     <Compile Include="Assets\Simple Scroll-Snap\Examples\Example 1 (macOS Finder)\Scripts\FileSelected.cs" />

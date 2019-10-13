@@ -16,7 +16,7 @@ public class getPannel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        index = simpleScrollSnap.CurrentPanel;
-        Debug.Log(index);
+       // index = simpleScrollSnap.CurrentPanel;
+   
     }
 }

@@ -20,7 +20,7 @@ public class click : MonoBehaviour
 
     public void echo()
     {
-        string s = meshProUGUI.text;
-        Debug.Log("Click "+s);
+       // string s = meshProUGUI.text;
+        Debug.Log("Click ");
     }
 }
