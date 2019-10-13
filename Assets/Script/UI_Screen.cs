@@ -39,7 +39,7 @@ namespace Ingenius.UI
             {
                 EventSystem.current.SetSelectedGameObject(m_StartSelectable.gameObject);
             }
-            Debug.Log(gameObject.name);
+         //   Debug.Log(gameObject.name);
         }
 
    
