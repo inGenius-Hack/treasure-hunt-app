@@ -1,20 +1,23 @@
 ﻿using DanielLochner.Assets.SimpleScrollSnap;
 using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
+using Firebase.Unity.Editor;
 
 namespace Ingenius.UI
 {
     public class UI_System : MonoBehaviour
     {
-
-
         #region Variables
         [Header("Player Data")]
         public int level = 1;
         public string teamName;
+        public GameObject tf_teamname;
+        public GameObject tf_password;
         public string password;
         public GameObject tf_overlay;
 
@@ -49,7 +52,7 @@ namespace Ingenius.UI
         #region Main Methods
         void Start()
         {
-          //  ResetPlayer();
+            //    ResetPlayer();
             Debug.Log("ui");
             LoadPlayer();
             refresh.Invoke();
@@ -210,7 +213,7 @@ namespace Ingenius.UI
         public void play()
         {
             int index = getSelectedLevel();
-            if (index+1 <= level)
+            if (index + 1 <= level)
             {
 
                 SwitchScreens(screens[5] as UI_Screen);
@@ -226,14 +229,71 @@ namespace Ingenius.UI
         {
             level = 1;
             SavePlayer();
+            Firebase.Auth.FirebaseAuth auth;
+            auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+            Debug.Log("Before: "+auth.CurrentUser);
+            auth.SignOut();
+            Debug.Log("After: " + auth.CurrentUser);
             SwitchScreens(screens[0] as UI_Screen);
             refresh.Invoke();
             simpleScrollSnap.GoToPanel(0);
 
         }
 
+        public void loginauth()
+        {
+            tf_overlay.SetActive(true);
+            teamName = tf_teamname.GetComponent<TMP_InputField>().text;
+            password = tf_password.GetComponent<TMP_InputField>().text;
+            Debug.Log("Team Name: " + teamName);
+            Debug.Log("Password: " + password);
+            Firebase.Auth.FirebaseAuth auth;
+            auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+            auth.SignInWithEmailAndPasswordAsync(teamName + "@ingenius.com", password).ContinueWith(task =>
+              {
+                  if (task.IsCanceled)
+                  {
+                      UnityMainThreadDispatcher.Instance().Enqueue(hideOverlay());
+                      Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                      return;
+                  }
+                  if (task.IsFaulted)
+                  {
+                      UnityMainThreadDispatcher.Instance().Enqueue(hideOverlay());
+                      Debug.Log("In Faulted");
+                      Debug.Log("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                      return;
+                  }
+                  //   tf_overlay.SetActive(false);
+                  //   SwitchScreens(screens[1] as UI_Screen);
+                  UnityMainThreadDispatcher.Instance().Enqueue(hideOverlayAndNext());
+
+                  Firebase.Auth.FirebaseUser newUser = task.Result;
+                  Debug.LogFormat("User signed in successfully: {0} ({1})",
+                      newUser.DisplayName, newUser.UserId);
+              });
+            //   tf_overlay.SetActive(false);
+        }
+
+        // public IEnumerator ThisWillBeExecutedOnTheMainThread()
+        // {
+        //     Debug.Log("This is executed from the main thread");
+        //     yield return null;
+        // }
+
+        public IEnumerator hideOverlayAndNext(){
+            tf_overlay.SetActive(false);
+            SwitchScreens(screens[1] as UI_Screen);
+            yield return null;
+        }
+
+        public IEnumerator hideOverlay()
+        {
+            tf_overlay.SetActive(false);
+            yield return null;
+        }
         #endregion
     }
 }
 
-    
+
